@@ -1,0 +1,37 @@
+<ion-view view-title="Logs">
+    <ion-content padding="true">
+        <div class="logs-container">
+            <div class="row">
+                <div class="col col-67 col-center">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Command" ng-model="myMsg">
+                    </label>
+                </div>
+                <div class="col col-33 col-center">
+                    <button ng-click="send(myMsg)" class="button button-block button-calm">Send</button>
+                </div>
+            </div>
+
+            <div class="item item-light side-2">
+                <ion-item class="item item-divider item-icon-right">Sent Messages
+                    <button class="icon ion-ios-trash button button-small button-clear button-assertive" ng-click="clearSent()">
+                    </button>
+                </ion-item>
+                <ion-scroll>
+                    <h2 ng-repeat="sentMsg in sentMsgs | reverse track by $index">
+                        Msg {{sentMsgs.length-$index}}: {{sentMsg}}
+                    </h2>
+                </ion-scroll>
+            </div>
+            <div class="item item-light side-2">
+                <ion-item class="item item-divider item-icon-right">Recieved Messages
+                    <button class="icon ion-ios-trash button button-small button-clear button-assertive" ng-click="clearRecieved()">
+                    </button>
+                </ion-item>
+                <ion-scroll>
+                    <h2 ng-repeat="recievedMsg in recievedMsgs | reverse track by $index">Msg {{recievedMsgs.length-$index}}: {{recievedMsg}}</h2>
+                </ion-scroll>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>

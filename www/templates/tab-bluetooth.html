@@ -1,0 +1,66 @@
+<ion-view view-title="Bluetooth Setting">
+    <ion-content padding="true">
+        <div ng-if="!isEnabled">
+            <ion-item class="item item-button-right">Enable Bluetooth
+                <button style="font-size:12px;" class="button button-calm" ng-click="BTEnable(isEnabled)">Enable</button>
+            </ion-item>
+            <ion-item class="item-text-wrap">
+                <p>This application requires Bluetooth Connection. Please enable Bluetooth.</p>
+            </ion-item>
+        </div>
+        <ion-item ng-if="isEnabled" class="item item-button-right">Bluetooth Discoveriable
+            <button ng-disabled="disableButton" style="font-size:12px;" class="button button-calm" ng-click="BTDiscoverable()">Make Discoverable</button>
+        </ion-item>
+        <div ng-if="isEnabled" class="bluetooth-container">
+            <div class="upper">
+                <div class="item item-divider item-icon-right">
+                    Connected Device
+                </div>
+                <ion-item class="item item-icon-right item-button-right" ng-if="!isConnected">
+                    No Bluetooth Device Connected
+                    <br/>
+                    <br/>
+                    <i class="icon ion-record assertive"></i>
+                </ion-item>
+                <ion-item class="item item-icon-right" ng-if="isConnected" ng-click="disconnect()">
+                    {{connectedDevice.name}}
+                    <br/>{{connectedDevice.id}}
+                    <br/>
+                    <i class="icon ion-record balanced"></i>
+                </ion-item>
+            </div>
+            <div class="middle">
+                <div class="item item-divider">
+                    Paired Devices
+                </div>
+                <ion-scroll class="scroll">
+                    <div ng-repeat="pairedDevice in pairedDevices">
+                        <ion-item class="item item-button-right" ng-click="connect(pairedDevice)">
+                            <h2>{{pairedDevice.name}}</h2>
+                            <h2>{{pairedDevice.id}}</h2>
+                        </ion-item>
+                    </div>
+                </ion-scroll>
+            </div>
+            <div class="middle">
+                <div class="item item-divider">
+                    Available Devices
+                    <ion-spinner ng-if="isScan" style="float:right;" icon="ripple" class="spinner-calm"></ion-spinner>
+                </div>
+                <ion-scroll class="scroll">
+                    <div ng-repeat="unpairedDevice in unpairedDevices">
+                        <ion-item class="item item-icon-right" ng-click="connect(unpairedDevice)">
+                            <h2>{{unpairedDevice.name}}</h2>
+                            <h2>{{unpairedDevice.id}}</h2>
+                        </ion-item>
+                    </div>
+                </ion-scroll>
+            </div>
+            <div class="lower">
+                <Button class="button button-block button-large button-calm" ng-click="onRefresh()" ng-disabled="isScan">
+                    Scan New Devices
+                </Button>
+            </div>
+        </div>
+    </ion-content>
+</ion-view>
