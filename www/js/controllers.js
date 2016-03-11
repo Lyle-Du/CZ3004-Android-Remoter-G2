@@ -58,7 +58,7 @@ angular.module('starter.controllers', [])
         enable: false
     };
 
-    //Robot.subscribe($scope, reRender);
+    Robot.subscribe($scope, renderMyScence);
     //$scope.onViewChanged = reRender;
 
     var WALL_LOCATIONS = [
@@ -88,7 +88,7 @@ angular.module('starter.controllers', [])
         value: 1
     };
     $scope.setLoc = function () {
-        BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
+        //BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
     };
 
@@ -97,23 +97,23 @@ angular.module('starter.controllers', [])
     };
 
     $scope.forward = function () {
-        BLE.write('f').then(function () {
+        BLE.write('f1').then(function () {
             $scope.currentState = "Forward"
         });
     }
     $scope.backward = function () {
-        BLE.write('r').then(function () {
+        BLE.write('b1').then(function () {
             $scope.currentState = "Backward"
         });
     }
     $scope.left = function () {
-        BLE.write('tl').then(function () {
+        BLE.write('l1').then(function () {
             $scope.currentState = "Turn Left"
         });
     }
 
     $scope.right = function () {
-        BLE.write('tr').then(function () {
+        BLE.write('r1').then(function () {
             $scope.currentState = "Turn Right"
         });
     }

@@ -53,11 +53,15 @@ angular.module('starter.services')
         loader.onLoadCallback(function(){
 
             // set up camera perspective
+
             scene.camera.position = vec3.toXYZ([Robot.getLocation()[1]+CAMERA_OFFSET[0],CAMERA_OFFSET[1],Robot.getLocation()[0]+CAMERA_OFFSET[2]]);
+            console.log(scene.camera.position);
             scene.camera.up = vec3.toXYZ([0,1,0]);
+            console.log(Robot.getOrientation());
             scene.camera.lookat = vec3.toXYZ(vec3.add([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
             scene.camera.position = vec3.toXYZ(vec3.subtract([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
-
+            console.log(scene.camera.position);
+            console.log(scene.camera.lookat);
             scene.perspective.aspect = CANVAS_WIDTH/CANVAS_HEIGHT;
             scene.perspective.fov = FOV;
             scene.viewport.width = CANVAS_WIDTH;
@@ -70,7 +74,7 @@ angular.module('starter.services')
             //scene.camera.lookat = {x:8, y:0, z:10};
 
             //plane
-            var plane = Phoria.Util.generateTesselatedPlane(SCENE_SIZE/SCALE,SCENE_SIZE/SCALE,SCALE,SCENE_SIZE);
+            var plane = Phoria.Util.generateTesselatedPlane(SCENE_SIZE/SCALE ^ 0,SCENE_SIZE/SCALE ^ 0 ,0,SCENE_SIZE);
 
             scene.graph.push(Phoria.Entity.create({
               points: plane.points,
