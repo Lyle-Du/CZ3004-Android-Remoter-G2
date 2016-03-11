@@ -33,7 +33,7 @@ angular.module('starter.services')
      * one of 0-3 indicating : NESW
      * @type {int}
      */
-    var orientaionVector = [[-1,0,0],[0,0,1], [1,0,0],[0,0,-1]];
+    var orientaionVector = [[0,0,1],[1,0,0], [0,0,-1],[-1,0,0]];
 
     /**
      * internal value of lookat point
@@ -53,7 +53,7 @@ angular.module('starter.services')
         loader.onLoadCallback(function(){
 
             // set up camera perspective
-            scene.camera.position = vec3.toXYZ([Robot.getLocation()[0]+CAMERA_OFFSET[0],CAMERA_OFFSET[1],Robot.getLocation()[1]+CAMERA_OFFSET[2]]);
+            scene.camera.position = vec3.toXYZ([Robot.getLocation()[1]+CAMERA_OFFSET[0],CAMERA_OFFSET[1],Robot.getLocation()[0]+CAMERA_OFFSET[2]]);
             scene.camera.up = vec3.toXYZ([0,1,0]);
             scene.camera.lookat = vec3.toXYZ(vec3.add([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
             scene.camera.position = vec3.toXYZ(vec3.subtract([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
@@ -93,7 +93,7 @@ angular.module('starter.services')
                   var cube = Phoria.Entity.create(Phoria.Util.generateUnitCube(SCALE));
                   cube.textures.push(wallTexture);
                   for (var k = 0; k < 6; k++) cube.polygons[k].texture = 0;
-                  cube.translateX(i+SCALE).translateZ(j+SCALE);
+                  cube.translateZ(i+SCALE).translateX(j+SCALE);
                   //Phoria.Entity.debug(cube, {
                   //  showId: true,
                   //  showPosition: true
