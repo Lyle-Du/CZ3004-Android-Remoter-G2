@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
     });
 
     Robot.setLocation(11, 11);
-    Robot.setOrientation(2);
+    Robot.setOrientation(0);
 
     $scope.robot = Robot;
     $scope.block = [];

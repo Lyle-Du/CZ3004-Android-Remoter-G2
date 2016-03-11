@@ -13,15 +13,6 @@ angular.module('starter.services')
         image.onload = function () {
             imageLoaded = true;
         };
-        rotate = function (times, x, y) {
-            var newX = 0;
-            for (var i = 0; i < times; i++) {
-                newX = y;
-                y = -x;
-                x = newX;
-            }
-            return [x, y];
-        };
 
         return {
             render: function (canvas) {
@@ -57,7 +48,7 @@ angular.module('starter.services')
                 }
                 ctx.restore();
 
-                callback = function () {
+                var callback = function () {
                     ctx.save();
 
 
@@ -67,12 +58,15 @@ angular.module('starter.services')
                     var base = constants.rotate(Robot.getOrientation() %4,
                         SQUARE_WIDTH,
                         SQUARE_HEIGHT);
-                    ctx.rotate(Math.PI/2 * (Robot.getOrientation()));
-                    ctx.translate(-base[0]+yx[0], -base[1]+yx[1]);
 
                     //offset the flip
+                    ctx.translate(-base[0]+yx[0], -base[1]+yx[1]);
                     ctx.scale(1,-1);
+
+
                     ctx.translate(0,-base[1]*3);
+                    ctx.rotate(Math.PI/2 * (Robot.getOrientation()));
+
 
                     ctx.drawImage(image, 0, 0, base[0] * 3, base[1] * 3 );
                     ctx.restore();
