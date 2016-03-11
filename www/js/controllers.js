@@ -1,6 +1,6 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function ($scope, $rootScope, $localStorage, $state, BLE, Robot, sceneRendering, DDrender) {
+.controller('DashCtrl', function ($scope, $rootScope, $localStorage, $state, BLE, Robot, sceneRendering, DDrender,constants) {
     document.addEventListener("deviceready", function () {
         $scope.isAuto = true;
         $scope.onToggleChange($scope.isAuto);
@@ -82,14 +82,13 @@ angular.module('starter.controllers', [])
         Robot.notify();
     };
     $scope.y = {
-        value: 10
+        value: 1
     };
     $scope.x = {
-        value: 10
+        value: 1
     };
     $scope.setLoc = function () {
-        //$rootScope.$broadcast("bluetooth:recievedData",JSON.parse('{"grid":"800008000080000800008000080000800008000080000800008000080000800008000080000"}'));
-        BLE.write("[" + $scope.x.value + "," + $scope.y.value + "]");
+        BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
     };
 

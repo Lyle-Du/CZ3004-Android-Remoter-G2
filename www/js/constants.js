@@ -3,7 +3,7 @@
  */
 angular.module('starter.services')
   .constant("constants",{
-    FLIP_RECEIVED_XY_COORDINATE : false,
+    FLIP_RECEIVED_XY_COORDINATE : true,
     //0 1 2 3
     ORIENTATION_OFFSET : 0,
 

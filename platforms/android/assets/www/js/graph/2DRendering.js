@@ -26,6 +26,9 @@ angular.module('starter.services')
             render: function (canvas) {
                 var ctx = canvas.getContext("2d");
                 ctx.save();
+                ctx.scale(1,-1);
+                ctx.translate(0,-constants.TWO_D_CANVAS_HEIGHT);
+                ctx.save();
                 for (var i = 0; i < 20; i++) {
                     ctx.save();
                     for (var j = 0; j < 15; j++) {
@@ -73,6 +76,7 @@ angular.module('starter.services')
                         imageLoaded = true;
                     }
                 }
+                ctx.restore();
             }
         }
     });
