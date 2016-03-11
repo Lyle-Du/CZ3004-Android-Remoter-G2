@@ -46,12 +46,19 @@ angular.module('starter.services')
     CLEAR_COLOR : "#80FF00",
     ROBOT_BACKGROUND : "#66FFFF",
     ROBOT_COLOR : "#FF0000",
+      /**
+       * Rotation from positive X axis to positive Y axis for 90 degree
+       * @param times 90*time
+       * @param x
+       * @param y
+       * @returns {*[x,y]}
+       */
     rotate : function (times, x, y) {
-      var newX = 0;
+      var newY = 0;
       for (var i = 0; i < times; i++) {
-          newX = y;
-          y = -x;
-          x = newX;
+          newY = x;
+          x = -y;
+          y = newY;
       }
       return [x, y];
     },

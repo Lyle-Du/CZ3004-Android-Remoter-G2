@@ -51,24 +51,25 @@ angular.module('starter.services')
                 var callback = function () {
                     ctx.save();
 
-
-                    var yx = constants.rotate(Robot.getOrientation() % 4,
-                        SQUARE_WIDTH * (Robot.getLocation()[1]),
-                        SQUARE_HEIGHT * (Robot.getLocation()[0]));
-                    var base = constants.rotate(Robot.getOrientation() %4,
-                        SQUARE_WIDTH,
-                        SQUARE_HEIGHT);
-
-                    //offset the flip
-                    ctx.translate(-base[0]+yx[0], -base[1]+yx[1]);
                     ctx.scale(1,-1);
 
+                    var yx = constants.rotate(4-Robot.getOrientation() % 4,
+                        SQUARE_WIDTH * (Robot.getLocation()[1]),
+                        -SQUARE_HEIGHT * (Robot.getLocation()[0]));
+                    var base = constants.rotate(4-Robot.getOrientation() %4,
+                        SQUARE_WIDTH,
+                        -SQUARE_HEIGHT);
 
-                    ctx.translate(0,-base[1]*3);
+                    //offset the flip
+
+
+
+
+
                     ctx.rotate(Math.PI/2 * (Robot.getOrientation()));
+                    ctx.translate(-base[0], -base[1]);
 
-
-                    ctx.drawImage(image, 0, 0, base[0] * 3, base[1] * 3 );
+                    ctx.drawImage(image, yx[0], yx[1], base[0] * 3, base[1] * 3 );
                     ctx.restore();
                 };
 

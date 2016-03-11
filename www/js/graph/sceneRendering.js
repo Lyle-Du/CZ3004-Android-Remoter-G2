@@ -55,13 +55,12 @@ angular.module('starter.services')
             // set up camera perspective
 
             scene.camera.position = vec3.toXYZ([Robot.getLocation()[1]+CAMERA_OFFSET[0],CAMERA_OFFSET[1],Robot.getLocation()[0]+CAMERA_OFFSET[2]]);
-            console.log(scene.camera.position);
+
             scene.camera.up = vec3.toXYZ([0,1,0]);
-            console.log(Robot.getOrientation());
+
             scene.camera.lookat = vec3.toXYZ(vec3.add([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
             scene.camera.position = vec3.toXYZ(vec3.subtract([],vec3.fromXYZ(scene.camera.position),orientaionVector[Robot.getOrientation()]));
-            console.log(scene.camera.position);
-            console.log(scene.camera.lookat);
+
             scene.perspective.aspect = CANVAS_WIDTH/CANVAS_HEIGHT;
             scene.perspective.fov = FOV;
             scene.viewport.width = CANVAS_WIDTH;
