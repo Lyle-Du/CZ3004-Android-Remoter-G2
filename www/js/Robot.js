@@ -95,10 +95,10 @@ angular.module('starter.services')
                     ];
                     break;
                 case "l":
-                    robotLocation = (robotLocation + 4 - reading) % 4;
+                    robotOrientation = (robotOrientation + 4 - reading) % 4;
                     break;
                 case "r":
-                    robotOrientation = (robotOrientation + reading) % 4;
+                    robotOrientation = (robotOrientation + 4 + reading) % 4;
                     break;
             }
         }

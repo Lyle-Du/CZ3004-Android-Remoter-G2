@@ -59,6 +59,10 @@ angular.module('starter.controllers', [])
     };
 
     Robot.subscribe($scope, renderMyScence);
+    Robot.subscribe($scope, function () {
+       $scope.x.value = Robot.getLocation()[0];
+        $scope.y.value = Robot.getLocation()[1];
+    });
     //$scope.onViewChanged = reRender;
 
     var WALL_LOCATIONS = [
@@ -81,12 +85,8 @@ angular.module('starter.controllers', [])
         Robot.getMap()[$scope.block[0]][$scope.block[1]] = 1;
         Robot.notify();
     };
-    $scope.y = {
-        value: 1
-    };
-    $scope.x = {
-        value: 1
-    };
+    $scope.y = {value: 1};
+    $scope.x = {value: 1};
     $scope.setLoc = function () {
         //BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
