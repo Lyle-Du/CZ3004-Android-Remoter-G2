@@ -60,12 +60,6 @@ angular.module('starter.services')
                         SQUARE_WIDTH,
                         -SQUARE_HEIGHT);
 
-                    //offset the flip
-
-
-
-
-
                     ctx.rotate(Math.PI/2 * (Robot.getOrientation()));
                     ctx.translate(-base[0], -base[1]);
 

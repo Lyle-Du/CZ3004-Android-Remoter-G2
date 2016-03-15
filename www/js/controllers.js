@@ -133,7 +133,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE) {
+.controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE,constants) {
     document.addEventListener("deviceready", function () {
         //this observer handle updating recieved data to ui
         $rootScope.$on('bluetooth:recievedData', function () {
@@ -167,13 +167,10 @@ angular.module('starter.controllers', [])
         console.log("try to clear sent")
         $rootScope.recievedMsgs = [];
     }
+    $scope.uuu = constants.SELF_BOARDCAST;
 })
 
-.controller('ProfileCtrl', function ($scope, $state, $localStorage) {
-
-
-    var defaultObj = ["there is a fire burning in my heart",
-        "Reaching a fever pitch, it's bringing me out the dark", ];
+.controller('ProfileCtrl', function ($rootScope,$scope, $state, $localStorage,Robot,BLE,constants) {
 
     //if (!$localStorage.getObject("Strings"))
     defaultObj = $localStorage.getObject("Strings");
@@ -182,6 +179,50 @@ angular.module('starter.controllers', [])
         $localStorage.setObject("Strings", defaultObj);
         console.log($localStorage.getObject("Strings"));
     };
+    $scope.SetMap = function () {
+        var mapString = {grid : $scope.preDefinedString[2]};
+        $rootScope.$boardcast("bluetooth:recievedData",mapString);
+    };
+    $scope.isAuto = false;
+    var handler = undefined;
+    $scope.onToggleChange = function (flag) {
+        if (flag){
+            handler = $rootScope.$on("bluetooth:recievedData", function (event,data) {
+                if (data == "s"){
+                    var returnValue = "s";
+                    for (var i = 0; i<5; i++){
+                        var j = 0;
+                        for (; j < constants.SENSOR_MAX_RANGE;j++) {
+                            var offsets = constants.rotate(
+                                Robot.getOrientation(),
+                                constants.DECTECTION_VECTOR[i][j][0],
+                                constants.DECTECTION_VECTOR[i][j][1]
+                            );
+                            var blkContent = Robot.getMap()
+                                [Robot.getLocation()[0] + offsets[0]]
+                                [Robot.getLocation()[1] + offsets[1]];
+                            if (blkContent == undefined || blkContent == 1) {
+                                    returnValue += j;
+                                    break;
+                                }
+                            }
+                            if (j==constants.SENSOR_MAX_RANGE) {
+                                returnValue += constants.SENSOR_MAX_RANGE;
+                            }
+                        }
+                    console.log(returnValue);
+                    BLE.write(returnValue);
+                }
+            })
+        }else {
+            handler();
+        }
+    }
+    $scope.boardcastEnable = constants.SELF_BOARDCAST;
+
+    $scope.onBoardcastChange = function (flag) {
+        constants.SELF_BOARDCAST = flag;
+    }
 })
 
 .controller('BluetoothCtrl', function ($scope, BLE, $ionicPopup, $ionicLoading, $rootScope) {

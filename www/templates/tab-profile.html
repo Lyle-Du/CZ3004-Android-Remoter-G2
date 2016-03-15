@@ -15,6 +15,10 @@
             <span class="input-label">Descriptor 75Chars</span>
             <input type="text" ng-model="preDefinedString[2]" ng-value="preDefinedString[2]" placeholder="00000">
         </label>
-        <button class="button button-large button-block button-calm" ng-click="set()">SetMap</button>
+        <button class="button button-large button-block button-calm" ng-click="setMap()">SetMap</button>
+        <ion-toggle ng-model="isAuto" toggle-class="toggle-calm" ng-change="onToggleChange(isAuto)"><span>Enable Simulation</span>
+        </ion-toggle>
+        <ion-toggle ng-model="boardcastEnable" toggle-class="toggle-calm" ng-change="onBoardcastChange(boardcastEnable)"><span>Enable Self Boardcast</span>
+        </ion-toggle>
     </ion-content>
 </ion-view>

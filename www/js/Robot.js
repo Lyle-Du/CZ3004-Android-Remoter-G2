@@ -43,7 +43,7 @@ angular.module('starter.services')
     var robotOrientation = 0;
 
     $rootScope.$on("bluetooth:recievedData", function (event, data) {
-        console.log(event,data);
+
         var stateChanged = false;
         if (data.robotPosition) {
             robotLocation[0] = data.robotPosition[constants.FLIP_RECEIVED_XY_COORDINATE ? 0 : 1];
@@ -66,7 +66,7 @@ angular.module('starter.services')
                     map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]] = CLEAR;
                 }
                 if (reading<constants.SENSOR_MAX_RANGE){
-                    var offset = constants.rotate(
+                    offset = constants.rotate(
                         robotOrientation,
                         constants.DECTECTION_VECTOR[i][reading][0],
                         constants.DECTECTION_VECTOR[i][reading][1]);
