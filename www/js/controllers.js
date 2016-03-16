@@ -69,7 +69,7 @@ angular.module('starter.controllers', [])
     [9, 9],
     [9, 10],
     [9, 11], [9, 12], [9, 13], [12, 11],
-    [12, 12]
+    [12, 12],[8,6]
   ];
     WALL_LOCATIONS.forEach(function (wall) {
         Robot.getMap()[wall[0]][wall[1]] = 1;
@@ -180,8 +180,9 @@ angular.module('starter.controllers', [])
         console.log($localStorage.getObject("Strings"));
     };
     $scope.SetMap = function () {
+
         var mapString = {grid : $scope.preDefinedString[2]};
-        $rootScope.$boardcast("bluetooth:recievedData",mapString);
+        BLE.write(mapString);
     };
     $scope.isAuto = false;
     var handler = undefined;
@@ -217,26 +218,14 @@ angular.module('starter.controllers', [])
         }else {
             handler();
         }
-    }
+    };
+
     $scope.boardcastEnable = constants.SELF_BOARDCAST;
 
     $scope.onBoardcastChange = function (flag) {
         constants.SELF_BOARDCAST = flag;
-    }
+    };
 
-    $scope.generate = function () {
-        //Descriptor for explore, explored = 0; unexplored = 1
-        $scope.MDFExplore = "";
-        $scope.MDFBlock = "";
-        var counter = 0, sum = 0;
-        for (var  i = 19; i>=0; i--){
-            for (var j = 0; j<15;j++){
-                if (counter==4){
-                    $scope.MDFExplore
-                }
-            }
-        }
-    }
 })
 
 .controller('BluetoothCtrl', function ($scope, BLE, $ionicPopup, $ionicLoading, $rootScope) {
