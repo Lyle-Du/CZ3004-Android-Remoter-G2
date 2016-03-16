@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.factory('BLE', function ($q, $rootScope, $state, $ionicPopup, $interval) {
+.factory('BLE', function ($q, $rootScope, $state, $ionicPopup,constants) {
     $rootScope.isEnabled = false;
     $rootScope.isConnected = false;
     $rootScope.sentMsg = null;
@@ -239,6 +239,7 @@ angular.module('starter.services', [])
         },
         write: function (data) {
             var deferred = $q.defer();
+            if (constants.SELF_BOARDCAST) $rootScope.$broadcast("bluetooth:recievedData",data);
             bluetoothSerial.write(data, function () {
                 $rootScope.sentData = data;
                 $rootScope.$broadcast("bluetooth:sentData", $rootScope.sentData)
@@ -310,96 +311,4 @@ angular.module('starter.services', [])
             return deferred.promise;
         }
     };
-})
-
-.factory('FILE', function ($q, $rootScope) {
-//    var path;
-//    var logOb;
-//
-//    var write = function (str) {
-//        if (!logOb) return;
-//        var log = str;
-//        console.log("going to log " + log);
-//        logOb.createWriter(function (fileWriter) {
-//            //fileWriter.seek(fileWriter.length);
-//            var obj;
-//            try {
-//                obj = JSON.parse(log.toString());
-//                var blob = new Blob(obj, {
-//                    type: 'text/plain'
-//                });
-//                fileWriter.write(blob);
-//                console.log("ok, in theory i worked");
-//            } catch (e) {
-//                console.log(e);
-//            }
-//        }, fail);
-//    }
-//
-//    var read = function () {
-//        logOb.file(function (file) {
-//            var reader = new FileReader();
-//            reader.onloadend = function (e) {
-//                console.log("the reading is " + this.result);
-//                var str = this.result;
-//                var obj;
-//                try {
-//                    obj = JSON.parse(str);
-//                } catch (e) {
-//                    console.log(e);
-//                }
-//                console.log(obj[0])
-//            };
-//            reader.readAsText(file);
-//        }, fail);
-//    }
-//
-//    function fail(e) {
-//        console.log("FileSystem Error");
-//        console.dir(e);
-//    }
-//
-//    document.addEventListener("deviceready", function () {
-//        window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dir) {
-//            console.log("got main dir", dir);
-//            dir.getFile("log.txt", {
-//                create: true
-//            }, function (file) {
-//                console.log("got the file", file);
-//                logOb = file;
-//                console.log("App started");
-//            });
-//        });
-//        setTimeout(function () {
-//            write(["a", "b"]);
-//            read();
-//        }, 3000);
-//
-//
-//    }, false);
-//
-//    return {
-//        write: function (str) {
-//            if (!logOb) return;
-//            var log = str;
-//            console.log("going to log " + log);
-//            logOb.createWriter(function (fileWriter) {
-//                fileWriter.seek(fileWriter.length);
-//                var blob = new Blob(log, {
-//                    type: 'text/plain'
-//                });
-//                fileWriter.write(blob);
-//                console.log("ok, in theory i worked");
-//            }, fail);
-//        },
-//        read: function () {
-//            logOb.file(function (file) {
-//                var reader = new FileReader();
-//                reader.onloadend = function (e) {
-//                    console.log(this.result);
-//                };
-//                reader.readAsText(file);
-//            }, fail);
-//        }
-//    };
 });

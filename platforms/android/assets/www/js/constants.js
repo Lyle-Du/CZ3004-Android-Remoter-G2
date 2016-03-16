@@ -4,10 +4,32 @@
 angular.module('starter.services')
   .constant("constants",{
     FLIP_RECEIVED_XY_COORDINATE : true,
-    //0 1 2 3
+    //0 1 2 3 NESW
     ORIENTATION_OFFSET : 0,
 
-    CAMERA_OFFSET :  [0,1,0],
+    SELF_BOARDCAST : true,
+
+    /*
+    when the robot facing N
+
+
+    */
+    DECTECTION_VECTOR: [
+        [[1,-2],[1,-3],[1,-4]],
+        [[2,-1],[3,-1],[4,-1]],
+        [[2,0],[3,0],[4,0]],
+        [[2,1],[3,1],[4,1]],
+        [[1,2],[1,3],[1,4]],
+    ],
+    //NESW vector
+    ORIENTATION_VECTOR :[
+        [1,0],[0,1],[-1,0],[0,-1]
+    ]
+    ,
+
+    SENSOR_MAX_RANGE : 3,
+
+    CAMERA_OFFSET :  [0.5,1,0],
     SCALE :  0.5,
     FOV :  85,
     CANVAS_WIDTH :  768,
@@ -24,4 +46,20 @@ angular.module('starter.services')
     CLEAR_COLOR : "#80FF00",
     ROBOT_BACKGROUND : "#66FFFF",
     ROBOT_COLOR : "#FF0000",
+      /**
+       * Rotation from positive X axis to positive Y axis for 90 degree
+       * @param times 90*time
+       * @param x
+       * @param y
+       * @returns {*[x,y]}
+       */
+    rotate : function (times, x, y) {
+      var newY = 0;
+      for (var i = 0; i < times; i++) {
+          newY = x;
+          x = -y;
+          y = newY;
+      }
+      return [x, y];
+    },
   });

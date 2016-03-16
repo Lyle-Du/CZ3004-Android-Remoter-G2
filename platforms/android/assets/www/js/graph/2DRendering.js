@@ -6,28 +6,22 @@ angular.module('starter.services')
         var SQUARE_WIDTH = constants.TWO_D_CANVAS_WIDTH / 15 ^ 0;
         var SQUARE_HEIGHT = constants.TWO_D_CANVAS_HEIGHT / 20 ^ 0;
         var image = new Image(),
-            imageLoaded = false;
+            imageLoaded = false,
+            neverLoadedBefore = true;
         image.src = "img/robot.png";
         //image.src = "img/tuzi.png";
         image.onload = function () {
             imageLoaded = true;
         };
-        rotate = function (times, x, y) {
-            var newX = 0;
-            for (var i = 0; i < times; i++) {
-                newX = y;
-                y = -x;
-                x = newX;
-            }
-            return [x, y];
-        };
 
         return {
             render: function (canvas) {
                 var ctx = canvas.getContext("2d");
-                ctx.save();
-                ctx.scale(1,-1);
-                ctx.translate(0,-constants.TWO_D_CANVAS_HEIGHT);
+                if (neverLoadedBefore){
+                    ctx.scale(1,-1);
+                    ctx.translate(0,-constants.TWO_D_CANVAS_HEIGHT);
+                    neverLoadedBefore = false;
+                }
                 ctx.save();
                 for (var i = 0; i < 20; i++) {
                     ctx.save();
@@ -54,16 +48,21 @@ angular.module('starter.services')
                 }
                 ctx.restore();
 
-                callback = function () {
+                var callback = function () {
                     ctx.save();
-                    var yx = rotate(Robot.getOrientation(),
+
+                    ctx.scale(1,-1);
+
+                    var yx = constants.rotate(4-Robot.getOrientation() % 4,
                         SQUARE_WIDTH * (Robot.getLocation()[1]),
-                        SQUARE_HEIGHT * (Robot.getLocation()[0]));
-                    var base = rotate(Robot.getOrientation(),
+                        -SQUARE_HEIGHT * (Robot.getLocation()[0]));
+                    var base = constants.rotate(4-Robot.getOrientation() %4,
                         SQUARE_WIDTH,
-                        SQUARE_HEIGHT);
-                    ctx.rotate(Math.PI * Robot.getOrientation() / 2);
+                        -SQUARE_HEIGHT);
+
+                    ctx.rotate(Math.PI/2 * (Robot.getOrientation()));
                     ctx.translate(-base[0], -base[1]);
+
                     ctx.drawImage(image, yx[0], yx[1], base[0] * 3, base[1] * 3 );
                     ctx.restore();
                 };
@@ -76,7 +75,6 @@ angular.module('starter.services')
                         imageLoaded = true;
                     }
                 }
-                ctx.restore();
             }
         }
     });

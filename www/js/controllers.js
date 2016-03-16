@@ -88,7 +88,7 @@ angular.module('starter.controllers', [])
     $scope.y = {value: 1};
     $scope.x = {value: 1};
     $scope.setLoc = function () {
-        //BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
+        BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
     };
 
@@ -120,10 +120,15 @@ angular.module('starter.controllers', [])
     $scope.reconfigure = function () {
         $state.go('tab.profile');
     }
-
-
-    $scope.updateMap = function () {
-        alert("Map updated")
+    $scope.startExplore =function (){
+        BLE.write('se').then(function () {
+            $scope.currentState = "Start Explore"
+        });
+    }
+    $scope.startShortest =function (){
+        BLE.write('ssp').then(function () {
+            $scope.currentState = "Start Shorest Path"
+        });
     }
 })
 

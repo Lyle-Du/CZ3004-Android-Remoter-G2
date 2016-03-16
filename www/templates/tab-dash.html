@@ -7,7 +7,9 @@
             <canvas id="2DCanvas" width="768" height="512" style="position:absolute;top:0;right:0;border:2px solid blue;width:30%;height:30%;background-color:white;z-index:999;"></canvas>
             <canvas id="3DCanvas" width="768" height="512" style="position:absolute;top:0;left:0;border:1px solid #000000;height:50%;"></canvas>
             <div class="info-view">
-                <ion-item>Current State: &nbsp;&nbsp;{{currentState}}</ion-item>
+                <ion-item><p style="margin-top:-15px;font-weight:bold;">Current State:</p>
+                    <p style="margin-bottom:-15px;">{{currentState}}</p></ion-item>
+            
                 <!--
                 <ion-toggle toggle-class="toggle-calm" ng-model="view.enable" ng-change="onViewChanged()" ng-checked="view.enable">
                     Enable 3D View
@@ -79,8 +81,8 @@
                         </div>
                     </div>
                     <div class="col col-40">
-                        <button class="button button-block button-small button-calm">Start Explore</button>
-                        <button class="button button-block button-small button-balanced">Start Shortest</button>
+                        <button class="button button-block button-small button-calm" ng-click="startExplore()">Start Explore</button>
+                        <button class="button button-block button-small button-balanced" ng-click="startShortest()">Start Shortest</button>
                         <button class="button button-block button-small button-positive">Clear</button>
                     </div>
                 </div>

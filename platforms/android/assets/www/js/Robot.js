@@ -5,7 +5,7 @@ angular.module('starter.services')
 
 .factory("Robot", function ($rootScope, ConverMapString, constants) {
     /**
-     * Map: 2D array 20*15 Array
+     * Map: 2D array 15*20 Array
      * 20
      * |
      * |
@@ -20,28 +20,31 @@ angular.module('starter.services')
      * Robot Position
      */
     var map = new Array(20);
+    var UNEXPLORE = 0,BLOCK = 1, CLEAR = 2;
     for (var i = 0; i < 20; i++) {
         map[i] = new Array(15);
         for (var j = 0; j < 15; j++) {
-            map[i][j] = 0;
+            map[i][j] = UNEXPLORE;
         }
     }
+
+
     /**
      * location of Robot
      * @type {number[x,y]}
      */
-    robotLocation = [0, 0];
+    var robotLocation = [0, 0];
 
     /**
      * the orientation of the robot
      * one of 0-3 indicating : NSWE
      * @type {int}
      */
-    robotOrientation = 0;
+    var robotOrientation = 0;
 
     $rootScope.$on("bluetooth:recievedData", function (event, data) {
+
         var stateChanged = false;
-        console.log(data.robotPosition);
         if (data.robotPosition) {
             robotLocation[0] = data.robotPosition[constants.FLIP_RECEIVED_XY_COORDINATE ? 0 : 1];
             robotLocation[1] = data.robotPosition[constants.FLIP_RECEIVED_XY_COORDINATE ? 1 : 0];
@@ -52,6 +55,54 @@ angular.module('starter.services')
             map = ConverMapString.convert(data.grid);
             stateChanged = true;
         }
+        if (new RegExp('^s\\d{5}').test(data)){
+            for(var i=0;i<5;i++){
+                var reading = parseInt(data[i+1]);
+                for(var j=0;j<Math.min(constants.SENSOR_MAX_RANGE,reading);j++){
+                    var offset = constants.rotate(
+                        robotOrientation,
+                        constants.DECTECTION_VECTOR[i][j][0],
+                        constants.DECTECTION_VECTOR[i][j][1]);
+                    map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]] = CLEAR;
+                }
+                if (reading<constants.SENSOR_MAX_RANGE){
+                    offset = constants.rotate(
+                        robotOrientation,
+                        constants.DECTECTION_VECTOR[i][reading][0],
+                        constants.DECTECTION_VECTOR[i][reading][1]);
+                    map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]] = BLOCK;
+                }
+            }
+            stateChanged = true;
+        }
+
+
+        if (new RegExp("^[fblr]\\d").test(data)){
+            stateChanged = true;
+            var reading = parseInt(data[1]);
+
+            switch (data[0]){
+                case "f":
+                    robotLocation = [
+                        robotLocation[0]+constants.ORIENTATION_VECTOR[robotOrientation][0]*reading,
+                        robotLocation[1]+constants.ORIENTATION_VECTOR[robotOrientation][1]*reading,
+                    ];
+                    break;
+                case "b":
+                    robotLocation = [
+                        robotLocation[0]-constants.ORIENTATION_VECTOR[robotOrientation][0]*reading,
+                        robotLocation[1]-constants.ORIENTATION_VECTOR[robotOrientation][1]*reading,
+                    ];
+                    break;
+                case "l":
+                    robotOrientation = (robotOrientation + 4 - reading) % 4;
+                    break;
+                case "r":
+                    robotOrientation = (robotOrientation + 4 + reading) % 4;
+                    break;
+            }
+        }
+
         if (stateChanged) notify();
     });
 
