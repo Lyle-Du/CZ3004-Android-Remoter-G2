@@ -52,6 +52,7 @@ angular.module('starter.services')
             stateChanged = true;
         }
         if (data.grid) {
+            console.log(data.grid);
             map = ConverMapString.convert(data.grid);
             stateChanged = true;
         }

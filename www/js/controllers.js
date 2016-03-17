@@ -1,16 +1,23 @@
 angular.module('starter.controllers', [])
 
-.controller('DashCtrl', function ($scope, $rootScope, $localStorage, $state, BLE, Robot, sceneRendering, DDrender,constants) {
+.controller('DashCtrl', function ($scope, $rootScope, $localStorage, $state, BLE, Robot, sceneRendering, DDrender, constants) {
+    $scope.currentState = "Stop";
+    $scope.checkMsg = "none";
     document.addEventListener("deviceready", function () {
         $scope.isAuto = true;
         $scope.onToggleChange($scope.isAuto);
         //init variables
         $scope.currentState = "Stop";
+        $scope.checkMsg = "none";
         //this observer handle updating recieved data to ui
         $rootScope.$on('bluetooth:recievedData', function () {
                 //$rootScope.recievedData = data;
                 if ($scope.recievedData.robotPosition != null)
                     $scope.currentState = "Stop";
+                if ($scope.recievedData.explore != null)
+                    $scope.checkMsg = $scope.recievedData.explore;
+                if ($scope.recievedData.block != null)
+                    $scope.checkMsg = $scope.recievedData.block;
                 $scope.$apply();
             })
             //initial the scence;
@@ -60,7 +67,7 @@ angular.module('starter.controllers', [])
 
     Robot.subscribe($scope, renderMyScence);
     Robot.subscribe($scope, function () {
-       $scope.x.value = Robot.getLocation()[0];
+        $scope.x.value = Robot.getLocation()[0];
         $scope.y.value = Robot.getLocation()[1];
     });
     //$scope.onViewChanged = reRender;
@@ -69,7 +76,7 @@ angular.module('starter.controllers', [])
     [9, 9],
     [9, 10],
     [9, 11], [9, 12], [9, 13], [12, 11],
-    [12, 12],[8,6]
+    [12, 12], [8, 6]
   ];
     WALL_LOCATIONS.forEach(function (wall) {
         Robot.getMap()[wall[0]][wall[1]] = 1;
@@ -85,8 +92,12 @@ angular.module('starter.controllers', [])
         Robot.getMap()[$scope.block[0]][$scope.block[1]] = 1;
         Robot.notify();
     };
-    $scope.y = {value: 1};
-    $scope.x = {value: 1};
+    $scope.y = {
+        value: 1
+    };
+    $scope.x = {
+        value: 1
+    };
     $scope.setLoc = function () {
         BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
@@ -120,12 +131,12 @@ angular.module('starter.controllers', [])
     $scope.reconfigure = function () {
         $state.go('tab.profile');
     }
-    $scope.startExplore =function (){
+    $scope.startExplore = function () {
         BLE.write('se').then(function () {
             $scope.currentState = "Start Explore"
         });
     }
-    $scope.startShortest =function (){
+    $scope.startShortest = function () {
         BLE.write('ssp').then(function () {
             $scope.currentState = "Start Shorest Path"
         });
@@ -138,7 +149,7 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE,constants) {
+.controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE, constants) {
     document.addEventListener("deviceready", function () {
         //this observer handle updating recieved data to ui
         $rootScope.$on('bluetooth:recievedData', function () {
@@ -172,11 +183,9 @@ angular.module('starter.controllers', [])
         console.log("try to clear sent")
         $rootScope.recievedMsgs = [];
     }
-    $scope.uuu = constants.SELF_BOARDCAST;
 })
 
-.controller('ProfileCtrl', function ($rootScope,$scope, $state, $localStorage,Robot,BLE,constants) {
-
+.controller('ProfileCtrl', function ($rootScope, $scope, $state, $localStorage, Robot, BLE, constants) {
     //if (!$localStorage.getObject("Strings"))
     defaultObj = $localStorage.getObject("Strings");
     $scope.preDefinedString = defaultObj;
@@ -186,41 +195,42 @@ angular.module('starter.controllers', [])
     };
     $scope.SetMap = function () {
 
-        var mapString = {grid : $scope.preDefinedString[2]};
+        var mapString = {
+            grid: $scope.preDefinedString[2]
+        };
         BLE.write(mapString);
     };
     $scope.isAuto = false;
     var handler = undefined;
     $scope.onToggleChange = function (flag) {
-        if (flag){
-            handler = $rootScope.$on("bluetooth:recievedData", function (event,data) {
-                if (data == "s"){
+        if (flag) {
+            handler = $rootScope.$on("bluetooth:recievedData", function (event, data) {
+                if (data == "s") {
                     var returnValue = "s";
-                    for (var i = 0; i<5; i++){
+                    for (var i = 0; i < 5; i++) {
                         var j = 0;
-                        for (; j < constants.SENSOR_MAX_RANGE;j++) {
+                        for (; j < constants.SENSOR_MAX_RANGE; j++) {
                             var offsets = constants.rotate(
                                 Robot.getOrientation(),
                                 constants.DECTECTION_VECTOR[i][j][0],
                                 constants.DECTECTION_VECTOR[i][j][1]
                             );
-                            var blkContent = Robot.getMap()
-                                [Robot.getLocation()[0] + offsets[0]]
+                            var blkContent = Robot.getMap()[Robot.getLocation()[0] + offsets[0]]
                                 [Robot.getLocation()[1] + offsets[1]];
                             if (blkContent == undefined || blkContent == 1) {
-                                    returnValue += j;
-                                    break;
-                                }
-                            }
-                            if (j==constants.SENSOR_MAX_RANGE) {
-                                returnValue += constants.SENSOR_MAX_RANGE;
+                                returnValue += j;
+                                break;
                             }
                         }
+                        if (j == constants.SENSOR_MAX_RANGE) {
+                            returnValue += constants.SENSOR_MAX_RANGE;
+                        }
+                    }
                     console.log(returnValue);
                     BLE.write(returnValue);
                 }
             })
-        }else {
+        } else {
             handler();
         }
     };

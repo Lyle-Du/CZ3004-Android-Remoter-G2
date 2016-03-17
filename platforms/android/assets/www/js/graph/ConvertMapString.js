@@ -23,7 +23,7 @@ angular.module('starter.services')
       }
 
       var finalArray = new Array(20);
-      var index = 2;
+      var index = 0;
       for (var i = 0; i < 20; i++){
         finalArray[i] = new Array(15);
         for (var j = 0; j < 15; j++){

@@ -15,19 +15,10 @@
             <span class="input-label">Descriptor 75Chars</span>
             <input type="text" ng-model="preDefinedString[2]" ng-value="preDefinedString[2]" placeholder="00000">
         </label>
-        <button class="button button-large button-block button-calm" ng-click="setMap()">SetMap</button>
+        <button class="button button-large button-block button-calm" ng-click="SetMap()">SetMap</button>
         <ion-toggle ng-model="isAuto" toggle-class="toggle-calm" ng-change="onToggleChange(isAuto)"><span>Enable Simulation</span>
         </ion-toggle>
         <ion-toggle ng-model="boardcastEnable" toggle-class="toggle-calm" ng-change="onBoardcastChange(boardcastEnable)"><span>Enable Self Boardcast</span>
         </ion-toggle>
-        <button ng-click="generate()" class="button button-block button-calm">Generate MDF</button>
-        <label class="item item-input item-stacked-label">
-            <span class="input-label">MDF Explore</span>
-            <input type="text" ng-model="MDFExplore" ng-value="MDFExplore" placeholder="">
-        </label>
-        <label class="item item-input item-stacked-label">
-            <span class="input-label">MDF2</span>
-            <input type="text" ng-model="MDFBlock" ng-value="MDFBlock" placeholder="">
-        </label>
     </ion-content>
 </ion-view>
