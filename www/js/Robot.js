@@ -20,7 +20,9 @@ angular.module('starter.services')
      * Robot Position
      */
     var map = new Array(20);
-    var UNEXPLORE = 0,BLOCK = 1, CLEAR = 2;
+    var UNEXPLORE = 0,
+        BLOCK = 1,
+        CLEAR = 2;
     for (var i = 0; i < 20; i++) {
         map[i] = new Array(15);
         for (var j = 0; j < 15; j++) {
@@ -56,51 +58,53 @@ angular.module('starter.services')
             map = ConverMapString.convert(data.grid);
             stateChanged = true;
         }
-        if (new RegExp('^s\\d{5}').test(data)){
-            for(var i=0;i<5;i++){
-                var reading = parseInt(data[i+1]);
-                for(var j=0;j<Math.min(constants.SENSOR_MAX_RANGE,reading);j++){
+        if (new RegExp('^s\\d{5}').test(data)) {
+            for (var i = 0; i < 5; i++) {
+                var reading = parseInt(data[i + 1]);
+                for (var j = 0; j < Math.min(constants.SENSOR_MAX_RANGE, reading); j++) {
                     var offset = constants.rotate(
                         robotOrientation,
                         constants.DECTECTION_VECTOR[i][j][0],
                         constants.DECTECTION_VECTOR[i][j][1]);
-                    map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]] = CLEAR;
+                    if (map[robotLocation[0]+offset[0]]!= undefined && map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]]!=undefined)
+                        map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] = CLEAR;
                 }
-                if (reading<constants.SENSOR_MAX_RANGE){
+                if (reading < constants.SENSOR_MAX_RANGE) {
                     offset = constants.rotate(
                         robotOrientation,
                         constants.DECTECTION_VECTOR[i][reading][0],
                         constants.DECTECTION_VECTOR[i][reading][1]);
-                    map[robotLocation[0]+offset[0]][robotLocation[1]+offset[1]] = BLOCK;
+                    if (map[robotLocation[0] + offset[0]] != undefined && map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] != undefined) 
+                        map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] = BLOCK;
                 }
             }
             stateChanged = true;
         }
 
 
-        if (new RegExp("^[fblr]\\d").test(data)){
+        if (new RegExp("^[fblr]\\d{1,2}").test(data)) {
             stateChanged = true;
-            var reading = parseInt(data[1]);
+            var reading = parseInt(data[1] + data[2]);
 
-            switch (data[0]){
-                case "f":
-                    robotLocation = [
-                        robotLocation[0]+constants.ORIENTATION_VECTOR[robotOrientation][0]*reading,
-                        robotLocation[1]+constants.ORIENTATION_VECTOR[robotOrientation][1]*reading,
+            switch (data[0]) {
+            case "f":
+                robotLocation = [
+                        robotLocation[0] + constants.ORIENTATION_VECTOR[robotOrientation][0] * reading,
+                        robotLocation[1] + constants.ORIENTATION_VECTOR[robotOrientation][1] * reading,
                     ];
-                    break;
-                case "b":
-                    robotLocation = [
-                        robotLocation[0]-constants.ORIENTATION_VECTOR[robotOrientation][0]*reading,
-                        robotLocation[1]-constants.ORIENTATION_VECTOR[robotOrientation][1]*reading,
+                break;
+            case "b":
+                robotLocation = [
+                        robotLocation[0] - constants.ORIENTATION_VECTOR[robotOrientation][0] * reading,
+                        robotLocation[1] - constants.ORIENTATION_VECTOR[robotOrientation][1] * reading,
                     ];
-                    break;
-                case "l":
-                    robotOrientation = (robotOrientation + 4 - reading) % 4;
-                    break;
-                case "r":
-                    robotOrientation = (robotOrientation + 4 + reading) % 4;
-                    break;
+                break;
+            case "l":
+                robotOrientation = (robotOrientation + 4 - reading) % 4;
+                break;
+            case "r":
+                robotOrientation = (robotOrientation + 4 + reading) % 4;
+                break;
             }
         }
 

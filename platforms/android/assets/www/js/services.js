@@ -1,6 +1,6 @@
 angular.module('starter.services', [])
 
-.factory('BLE', function ($q, $rootScope, $state, $ionicPopup,constants) {
+.factory('BLE', function ($q, $rootScope, $state, $ionicPopup, constants) {
     $rootScope.isEnabled = false;
     $rootScope.isConnected = false;
     $rootScope.sentMsg = null;
@@ -239,7 +239,7 @@ angular.module('starter.services', [])
         },
         write: function (data) {
             var deferred = $q.defer();
-            if (constants.SELF_BOARDCAST) $rootScope.$broadcast("bluetooth:recievedData",data);
+            if (constants.SELF_BOARDCAST) $rootScope.$broadcast("bluetooth:recievedData", data);
             bluetoothSerial.write(data, function () {
                 $rootScope.sentData = data;
                 $rootScope.$broadcast("bluetooth:sentData", $rootScope.sentData)
@@ -247,6 +247,7 @@ angular.module('starter.services', [])
             }, function (error) {
                 deferred.reject(error);
             });
+
             return deferred.promise;
         },
         isConnected: function () {

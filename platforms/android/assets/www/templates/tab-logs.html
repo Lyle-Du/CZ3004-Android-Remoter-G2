@@ -28,7 +28,7 @@
                     </button>
                 </ion-item>
                 <ion-scroll>
-                    <h2 ng-repeat="recievedMsg in recievedMsgs | reverse track by $index">Msg {{recievedMsgs.length-$index}}: {{recievedMsg}}</h2>
+                    <h2 ng-repeat="myRecievedMsg in myRecievedMsgs | reverse track by $index">Msg {{myRecievedMsgs.length-$index}}: {{myRecievedMsg}}</h2>
                 </ion-scroll>
             </div>
         </div>

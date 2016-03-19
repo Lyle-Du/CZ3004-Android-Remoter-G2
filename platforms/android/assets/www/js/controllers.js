@@ -36,7 +36,6 @@ angular.module('starter.controllers', [])
         var threeDCanvas = document.getElementById('3DCanvas');
         //2d canvas
         var DDRender = DDrender.render(twoDCanvas);
-
         //3d canvas
         var renderer = new Phoria.CanvasRenderer(threeDCanvas);
         sceneRendering.getScene(function (scene) {
@@ -52,13 +51,13 @@ angular.module('starter.controllers', [])
         var threeDCanvas = document.getElementById('3DCanvas');
         //2d canvas
         var DDRender = DDrender.render(twoDCanvas);
-
         //3d canvas
         var renderer = new Phoria.CanvasRenderer(threeDCanvas);
         sceneRendering.getScene(function (scene) {
             scene.modelView();
             renderer.render(scene);
         });
+        console.log(renderer)
     }
 
     $scope.view = {
@@ -70,19 +69,20 @@ angular.module('starter.controllers', [])
         $scope.x.value = Robot.getLocation()[0];
         $scope.y.value = Robot.getLocation()[1];
     });
-    //$scope.onViewChanged = reRender;
 
-    var WALL_LOCATIONS = [
-    [9, 9],
-    [9, 10],
-    [9, 11], [9, 12], [9, 13], [12, 11],
-    [12, 12], [8, 6]
-  ];
+    var WALL_LOCATIONS = [];
     WALL_LOCATIONS.forEach(function (wall) {
         Robot.getMap()[wall[0]][wall[1]] = 1;
     });
 
-    Robot.setLocation(11, 11);
+    $scope.y = {
+        value: 1
+    };
+    $scope.x = {
+        value: 1
+    };
+
+    Robot.setLocation($scope.x.value, $scope.y.value);
     Robot.setOrientation(0);
 
     $scope.robot = Robot;
@@ -92,12 +92,7 @@ angular.module('starter.controllers', [])
         Robot.getMap()[$scope.block[0]][$scope.block[1]] = 1;
         Robot.notify();
     };
-    $scope.y = {
-        value: 1
-    };
-    $scope.x = {
-        value: 1
-    };
+
     $scope.setLoc = function () {
         BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
@@ -108,23 +103,23 @@ angular.module('starter.controllers', [])
     };
 
     $scope.forward = function () {
-        BLE.write('f1').then(function () {
+        BLE.write('f01').then(function () {
             $scope.currentState = "Forward"
         });
     }
     $scope.backward = function () {
-        BLE.write('b1').then(function () {
+        BLE.write('b01').then(function () {
             $scope.currentState = "Backward"
         });
     }
     $scope.left = function () {
-        BLE.write('l1').then(function () {
+        BLE.write('l01').then(function () {
             $scope.currentState = "Turn Left"
         });
     }
 
     $scope.right = function () {
-        BLE.write('r1').then(function () {
+        BLE.write('r01').then(function () {
             $scope.currentState = "Turn Right"
         });
     }
@@ -141,6 +136,9 @@ angular.module('starter.controllers', [])
             $scope.currentState = "Start Shorest Path"
         });
     }
+    $scope.clearMap = function () {
+
+    }
 })
 
 .filter('reverse', function () {
@@ -150,9 +148,22 @@ angular.module('starter.controllers', [])
 })
 
 .controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE, constants) {
+
     document.addEventListener("deviceready", function () {
         //this observer handle updating recieved data to ui
-        $rootScope.$on('bluetooth:recievedData', function () {
+        $scope.myRecievedMsgs = [];
+        $rootScope.$on('bluetooth:recievedData', function (event, data) {
+            console.log("hi")
+            if (new RegExp("[f]\\d{1,2}").test(data)) {
+                $scope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+
+            }else if (new RegExp("[r]\\d{1,2}").test(data)) {
+                $scope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            }else if (new RegExp("[l]\\d{1,2}").test(data)) {
+                $scope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            }else if (new RegExp("[b]\\d{1,2}").test(data)) {
+                $scope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            }
             $scope.$apply();
         })
 
@@ -167,10 +178,7 @@ angular.module('starter.controllers', [])
             return
         if ($rootScope.isConnected == false)
             return alert("Bluetooth is not connected.")
-        BLE.write(msg).then(function () {
-
-
-        }, function (error) {
+        BLE.write(msg).then(function () {}, function (error) {
             alert(error);
         })
     }
@@ -182,6 +190,7 @@ angular.module('starter.controllers', [])
     $scope.clearRecieved = function () {
         console.log("try to clear sent")
         $rootScope.recievedMsgs = [];
+        $scope.myRecievedMsgs = [];
     }
 })
 
@@ -215,8 +224,8 @@ angular.module('starter.controllers', [])
                                 constants.DECTECTION_VECTOR[i][j][0],
                                 constants.DECTECTION_VECTOR[i][j][1]
                             );
-                            var blkContent = Robot.getMap()[Robot.getLocation()[0] + offsets[0]]
-                                [Robot.getLocation()[1] + offsets[1]];
+                            var blkContent = Robot.getMap()[Robot.getLocation()[0] + offsets[0]] ?
+                                Robot.getMap()[Robot.getLocation()[0] + offsets[0]][Robot.getLocation()[1] + offsets[1]] : undefined;
                             if (blkContent == undefined || blkContent == 1) {
                                 returnValue += j;
                                 break;

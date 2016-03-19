@@ -50,9 +50,7 @@ angular.module('starter.services')
 
                 var callback = function () {
                     ctx.save();
-
                     ctx.scale(1,-1);
-
                     var yx = constants.rotate(4-Robot.getOrientation() % 4,
                         SQUARE_WIDTH * (Robot.getLocation()[1]),
                         -SQUARE_HEIGHT * (Robot.getLocation()[0]));
