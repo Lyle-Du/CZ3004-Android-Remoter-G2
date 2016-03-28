@@ -153,16 +153,17 @@ angular.module('starter.controllers', [])
         //this observer handle updating recieved data to ui
         $scope.myRecievedMsgs = [];
         $rootScope.$on('bluetooth:recievedData', function (event, data) {
-            console.log("hi")
-            if (new RegExp("[f]\\d{1,2}").test(data)) {
+            if (new RegExp("^[f]\\d{1,2}").test(data)) {
                 $scope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
 
-            }else if (new RegExp("[r]\\d{1,2}").test(data)) {
+            }else if (new RegExp("^[r]\\d{1,2}").test(data)) {
                 $scope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-            }else if (new RegExp("[l]\\d{1,2}").test(data)) {
+            }else if (new RegExp("^[l]\\d{1,2}").test(data)) {
                 $scope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-            }else if (new RegExp("[b]\\d{1,2}").test(data)) {
+            }else if (new RegExp("^[b]\\d{1,2}").test(data)) {
                 $scope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            }else{
+                $scope.myRecievedMsgs.push(data);
             }
             $scope.$apply();
         })
