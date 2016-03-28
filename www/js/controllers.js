@@ -96,6 +96,7 @@ angular.module('starter.controllers', [])
     $scope.setLoc = function () {
         BLE.write("x" + $scope.x.value + "y" + $scope.y.value);
         Robot.setLocation($scope.x.value, $scope.y.value);
+        Robot.setOrientation(0);
     };
 
     $scope.sendStr = function (index) {
@@ -137,7 +138,12 @@ angular.module('starter.controllers', [])
         });
     }
     $scope.clearMap = function () {
-
+        Robot.getMap().forEach(function (current,index,arr) {
+            current.forEach(function(current,index,arr){
+                arr[index] = 0;
+            })
+        })
+        Robot.notify();
     }
 })
 
@@ -244,6 +250,15 @@ angular.module('starter.controllers', [])
         }
     };
 
+    var stringHandler = $rootScope.$on("bluetooth:recievedData", function (event,data) {
+        if (data.explore){
+            $scope.exploreString = data.explore;
+        }
+        if (data.block){
+            $scope.blockString = data.block;
+        }
+    });
+    
     $scope.boardcastEnable = constants.SELF_BOARDCAST;
 
     $scope.onBoardcastChange = function (flag) {

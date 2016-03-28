@@ -58,6 +58,7 @@ angular.module('starter.services')
             map = ConverMapString.convert(data.grid);
             stateChanged = true;
         }
+        //s22222
         if (new RegExp('^s\\d{5}').test(data)) {
             for (var i = 0; i < 5; i++) {
                 var reading = parseInt(data[i + 1]);
@@ -74,7 +75,7 @@ angular.module('starter.services')
                         robotOrientation,
                         constants.DECTECTION_VECTOR[i][reading][0],
                         constants.DECTECTION_VECTOR[i][reading][1]);
-                    if (map[robotLocation[0] + offset[0]] != undefined && map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] != undefined) 
+                    if (map[robotLocation[0] + offset[0]] != undefined && map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] != undefined)
                         map[robotLocation[0] + offset[0]][robotLocation[1] + offset[1]] = BLOCK;
                 }
             }
