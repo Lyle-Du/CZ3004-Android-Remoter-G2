@@ -21,12 +21,20 @@ angular.module('starter.services', [])
                         var obj;
                         try {
                             obj = JSON.parse(data);
+                            $rootScope.recievedData = obj;
+                            $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
                         } catch (e) {
                             console.log(e);
                             obj = data;
+                            var multiObj = obj.split("\n")
+                            for (var i = 0; i < multiObj.length; ++i) {
+                                $rootScope.recievedData = multiObj[i];
+                                $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
+                                setTimeout(function () {
+                                    console.log("multi Obj wait");
+                                }, 500);
+                            }
                         }
-                        $rootScope.recievedData = obj;
-                        $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
                     })
                 },
                 function (error) {

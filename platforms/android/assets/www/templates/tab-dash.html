@@ -1,11 +1,11 @@
 <ion-view view-title="Dashboard">
     <ion-content class="padding">
-        <p style="position:absolute;top:0;left:0;padding:5px;z-index:99;">Message:&nbsp; {{checkMsg}}</p>
+        <p style="position:absolute;top:0;left:0;padding:5px;z-index:99;width:60%;">MDF String: {{checkMsg}}</p>
         <div class="dash-container">
             <div class="maze-view">
                 <canvas id="canvas" width="768" height="512" style="background-color: #eee"></canvas>
             </div>
-            <canvas id="2DCanvas" width="768" height="512" style="position:absolute;top:0;right:0;border:2px solid blue;width:40%;height:40%;background-color:white;z-index:999;"></canvas>
+            <canvas id="2DCanvas" width="768" height="512" style="position:absolute;top:0;right:0;border:2px solid blue;width:40%;height:40%;background-color:white;z-index:9;"></canvas>
             <canvas id="3DCanvas" width="768" height="512" style="position:absolute;top:0;left:0;border:1px solid #000000;height:50%;"></canvas>
             <div class="info-view">
                 <ion-item><p style="margin-top:-15px;font-weight:bold;">Current State:</p>
@@ -84,7 +84,7 @@
                     <div class="col col-40">
                         <button class="button button-block button-small button-calm" ng-click="startExplore()">Start Explore</button>
                         <button class="button button-block button-small button-balanced" ng-click="startShortest()">Start Shortest</button>
-                        <button class="button button-block button-small button-positive">Clear</button>
+                        <button class="button button-block button-small button-positive" ng-click="clearMap()">Clear</button>
                     </div>
                 </div>
             </div>

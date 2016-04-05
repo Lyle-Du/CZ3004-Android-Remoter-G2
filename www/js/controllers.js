@@ -138,6 +138,7 @@ angular.module('starter.controllers', [])
         });
     }
     $scope.clearMap = function () {
+        $scope.checkMsg = "none";
         Robot.getMap().forEach(function (current,index,arr) {
             current.forEach(function(current,index,arr){
                 arr[index] = 0;
