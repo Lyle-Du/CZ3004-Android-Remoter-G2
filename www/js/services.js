@@ -30,9 +30,6 @@ angular.module('starter.services', [])
                             for (var i = 0; i < multiObj.length; ++i) {
                                 $rootScope.recievedData = multiObj[i];
                                 $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
-                                setTimeout(function () {
-                                    console.log("multi Obj wait");
-                                }, 500);
                             }
                         }
                     })
