@@ -58,6 +58,16 @@ angular.module('starter.services')
             map = ConverMapString.convert(data.grid);
             stateChanged = true;
         }
+        if (data.explore){
+            map = ConverMapString.convert_offset2(data.exlpore);
+            stateChanged = true;
+        }
+
+        if (data.block){
+            map = ConverMapString.convert_blk(data.block,map);
+            stateChanged = true;
+        }
+
         //s22222
         if (new RegExp('^s\\d{5}').test(data)) {
             for (var i = 0; i < 5; i++) {
