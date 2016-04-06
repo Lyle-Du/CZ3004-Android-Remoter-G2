@@ -17,12 +17,6 @@
                     <p style="margin-top:-15px;font-weight:bold;">Current State:</p>
                     <p style="margin-bottom:-15px;">{{currentState}}</p>
                 </ion-item>
-
-                <!--
-                <ion-toggle toggle-class="toggle-calm" ng-model="view.enable" ng-change="onViewChanged()" ng-checked="view.enable">
-                    Enable 3D View
-                </ion-toggle>
--->
                 <ion-toggle ng-model="isAuto" toggle-class="toggle-calm" ng-change="onToggleChange(isAuto)"><span>Auto-update</span>
                 </ion-toggle>
                 <button class="button button-small button-block button-calm" ng-disabled="isAuto" style="margin-top:0px;" ng-click="manualUpdate()">Manual Update</button>

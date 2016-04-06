@@ -62,11 +62,10 @@ angular.module('starter.services', [])
         $rootScope.$on('bluetooth:sentData', function (event, data) {
             $rootScope.sentMsgs.push(data);
         })
-        
+
         $rootScope.$on('bluetooth:recievedData', function (event, data) {
             if (new RegExp("^[f]\\d{1,2}").test(data)) {
                 $rootScope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-
             } else if (new RegExp("^[r]\\d{1,2}").test(data)) {
                 $rootScope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
             } else if (new RegExp("^[l]\\d{1,2}").test(data)) {
@@ -83,7 +82,6 @@ angular.module('starter.services', [])
         $rootScope.$on('bluetooth:isConnected', function (event, data) {
             console.log("observer isConnected: " + data)
             if (data) {
-
                 bluetoothSerial.getConnectedDevice(function (data) {
                     $rootScope.connectedDevice = data;
                     $rootScope.$broadcast("bluetooth:connectedDevice", $rootScope.connectedDevice);

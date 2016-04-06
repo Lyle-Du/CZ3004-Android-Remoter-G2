@@ -156,26 +156,9 @@ angular.module('starter.controllers', [])
     };
 })
 
-.controller('LogsCtrl', function ($scope, $rootScope, $interval, BLE, constants) {
+.controller('LogsCtrl', function ($scope, $rootScope, BLE, constants) {
 
     document.addEventListener("deviceready", function () {
-        //this observer handle updating recieved data to ui
-//        $rootScope.$on('bluetooth:recievedData', function (event, data) {
-//            if (new RegExp("^[f]\\d{1,2}").test(data)) {
-//                $rootScope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-//
-//            } else if (new RegExp("^[r]\\d{1,2}").test(data)) {
-//                $rootScope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-//            } else if (new RegExp("^[l]\\d{1,2}").test(data)) {
-//                $rootScope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-//            } else if (new RegExp("^[b]\\d{1,2}").test(data)) {
-//                $rootScope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-//            } else {
-//                $rootScope.myRecievedMsgs.push(data);
-//            }
-//            $scope.$apply();
-//        })
-
         $rootScope.$on('bluetooth:sentData', function () {
             $scope.$apply();
         })
