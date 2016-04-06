@@ -59,7 +59,7 @@ angular.module('starter.services')
             stateChanged = true;
         }
         if (data.explore){
-            map = ConverMapString.convert_offset2(data.exlpore);
+            map = ConverMapString.convert_offset2(data.explore);
             stateChanged = true;
         }
 

@@ -210,9 +210,9 @@ angular.module('starter.controllers', [])
     $scope.set = function () {
         $localStorage.setObject("Strings", defaultObj);
         console.log($localStorage.getObject("Strings"));
+
     };
     $scope.SetMap = function () {
-
         var mapString = {
             grid: $scope.preDefinedString[2]
         };

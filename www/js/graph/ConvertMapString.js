@@ -37,12 +37,12 @@ angular.module('starter.services')
     convert_offset2 : function (data) {
       console.log(data);
       var allData = [];
-      for (var i = 2; i < data.length; i++){
+      for (var i = 0; i < data.length; i++){
         allData = allData.concat(HEXtoArray(data[i]));
       }
 
       var finalArray = new Array(20);
-      var index = 0;
+      var index = 2;
       for (var i = 0; i < 20; i++){
         finalArray[i] = new Array(15);
         for (var j = 0; j < 15; j++){
@@ -53,16 +53,16 @@ angular.module('starter.services')
       return finalArray
     },
     convert_blk : function (data,map) {
-      console.log(data);
+
       var allData = [];
       for (var i = 0; i < data.length; i++){
         allData = allData.concat(HEXtoArray(data[i]));
       }
 
       var finalArray = map;
+      console.log(finalArray);
       var index = 0;
       for (var i = 0; i < 20; i++){
-        finalArray[i] = new Array(15);
         for (var j = 0; j < 15; j++){
           if (finalArray[i][j]==1){
             finalArray[i][j] = allData[index] ? 1 : 2 ;
