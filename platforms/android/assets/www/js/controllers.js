@@ -2,7 +2,8 @@ angular.module('starter.controllers', [])
 
 .controller('DashCtrl', function ($scope, $rootScope, $localStorage, $state, BLE, Robot, sceneRendering, DDrender, constants) {
     $scope.currentState = "Stop";
-    $scope.checkMsg = "none";
+    $scope.exploreMsg = "none";
+    $scope.blockMsg = "none";
     document.addEventListener("deviceready", function () {
         $scope.isAuto = true;
         $scope.onToggleChange($scope.isAuto);
@@ -15,9 +16,9 @@ angular.module('starter.controllers', [])
                 if ($scope.recievedData.robotPosition != null)
                     $scope.currentState = "Stop";
                 if ($scope.recievedData.explore != null)
-                    $scope.checkMsg = $scope.recievedData.explore;
+                    $scope.exploreMsg = $scope.recievedData.explore;
                 if ($scope.recievedData.block != null)
-                    $scope.checkMsg = $scope.recievedData.block;
+                    $scope.blockMsg = $scope.recievedData.block;
                 $scope.$apply();
             })
             //initial the scence;
@@ -138,8 +139,10 @@ angular.module('starter.controllers', [])
         });
     }
     $scope.clearMap = function () {
-        Robot.getMap().forEach(function (current,index,arr) {
-            current.forEach(function(current,index,arr){
+        $scope.exploreMsg = "none";
+        $scope.blockMsg = "none";
+        Robot.getMap().forEach(function (current, index, arr) {
+            current.forEach(function (current, index, arr) {
                 arr[index] = 0;
             })
         })
@@ -157,22 +160,21 @@ angular.module('starter.controllers', [])
 
     document.addEventListener("deviceready", function () {
         //this observer handle updating recieved data to ui
-        $scope.myRecievedMsgs = [];
-        $rootScope.$on('bluetooth:recievedData', function (event, data) {
-            if (new RegExp("^[f]\\d{1,2}").test(data)) {
-                $scope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-
-            }else if (new RegExp("^[r]\\d{1,2}").test(data)) {
-                $scope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-            }else if (new RegExp("^[l]\\d{1,2}").test(data)) {
-                $scope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-            }else if (new RegExp("^[b]\\d{1,2}").test(data)) {
-                $scope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
-            }else{
-                $scope.myRecievedMsgs.push(data);
-            }
-            $scope.$apply();
-        })
+//        $rootScope.$on('bluetooth:recievedData', function (event, data) {
+//            if (new RegExp("^[f]\\d{1,2}").test(data)) {
+//                $rootScope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+//
+//            } else if (new RegExp("^[r]\\d{1,2}").test(data)) {
+//                $rootScope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+//            } else if (new RegExp("^[l]\\d{1,2}").test(data)) {
+//                $rootScope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+//            } else if (new RegExp("^[b]\\d{1,2}").test(data)) {
+//                $rootScope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+//            } else {
+//                $rootScope.myRecievedMsgs.push(data);
+//            }
+//            $scope.$apply();
+//        })
 
         $rootScope.$on('bluetooth:sentData', function () {
             $scope.$apply();
@@ -197,7 +199,7 @@ angular.module('starter.controllers', [])
     $scope.clearRecieved = function () {
         console.log("try to clear sent")
         $rootScope.recievedMsgs = [];
-        $scope.myRecievedMsgs = [];
+        $rootScope.myRecievedMsgs = [];
     }
 })
 
@@ -251,15 +253,15 @@ angular.module('starter.controllers', [])
         }
     };
 
-    var stringHandler = $rootScope.$on("bluetooth:recievedData", function (event,data) {
-        if (data.explore){
+    var stringHandler = $rootScope.$on("bluetooth:recievedData", function (event, data) {
+        if (data.explore) {
             $scope.exploreString = data.explore;
         }
-        if (data.block){
+        if (data.block) {
             $scope.blockString = data.block;
         }
     });
-    
+
     $scope.boardcastEnable = constants.SELF_BOARDCAST;
 
     $scope.onBoardcastChange = function (flag) {

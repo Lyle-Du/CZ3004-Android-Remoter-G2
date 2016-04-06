@@ -5,6 +5,7 @@ angular.module('starter.services', [])
     $rootScope.isConnected = false;
     $rootScope.sentMsg = null;
     $rootScope.recievedData = null;
+    $rootScope.myRecievedMsgs = [];
     $rootScope.sentMsgs = [];
     $rootScope.recievedMsgs = [];
     $rootScope.unpairedDevices = [];
@@ -29,7 +30,9 @@ angular.module('starter.services', [])
                             var multiObj = obj.split("\n")
                             for (var i = 0; i < multiObj.length; ++i) {
                                 $rootScope.recievedData = multiObj[i];
-                                $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
+                                if (multiObj[i] != "") {
+                                    $rootScope.$broadcast("bluetooth:recievedData", $rootScope.recievedData)
+                                }
                             }
                         }
                     })
@@ -58,6 +61,22 @@ angular.module('starter.services', [])
         //this observer handle updating sent data to ui
         $rootScope.$on('bluetooth:sentData', function (event, data) {
             $rootScope.sentMsgs.push(data);
+        })
+        
+        $rootScope.$on('bluetooth:recievedData', function (event, data) {
+            if (new RegExp("^[f]\\d{1,2}").test(data)) {
+                $rootScope.myRecievedMsgs.push("Move forward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+
+            } else if (new RegExp("^[r]\\d{1,2}").test(data)) {
+                $rootScope.myRecievedMsgs.push("Turn right " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            } else if (new RegExp("^[l]\\d{1,2}").test(data)) {
+                $rootScope.myRecievedMsgs.push("Turn left " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            } else if (new RegExp("^[b]\\d{1,2}").test(data)) {
+                $rootScope.myRecievedMsgs.push("Move backward " + parseInt(data.replace(/[^\d.]/g, '')) + " step(s)")
+            } else {
+                $rootScope.myRecievedMsgs.push(data);
+            }
+            $scope.$apply();
         })
 
         //this observer handle updating isConnected

@@ -1,6 +1,11 @@
 <ion-view view-title="Dashboard">
     <ion-content class="padding">
-        <p style="position:absolute;top:0;left:0;padding:5px;z-index:99;width:60%;">MDF String: {{checkMsg}}</p>
+        <div style="position:absolute;top:0;left:0;padding:5px;z-index:99;width:60%;">
+            <p style="font-weight:bold;">MDF Explore String: </p>
+            <p style="margin-top:-10px;">{{exploreMsg}}</p>
+            <p style="font-weight:bold;">MDF Block String: </p>
+            <p style="margin-top:-10px;">{{blockMsg}}</p>
+        </div>
         <div class="dash-container">
             <div class="maze-view">
                 <canvas id="canvas" width="768" height="512" style="background-color: #eee"></canvas>
@@ -8,9 +13,11 @@
             <canvas id="2DCanvas" width="768" height="512" style="position:absolute;top:0;right:0;border:2px solid blue;width:40%;height:40%;background-color:white;z-index:9;"></canvas>
             <canvas id="3DCanvas" width="768" height="512" style="position:absolute;top:0;left:0;border:1px solid #000000;height:50%;"></canvas>
             <div class="info-view">
-                <ion-item><p style="margin-top:-15px;font-weight:bold;">Current State:</p>
-                    <p style="margin-bottom:-15px;">{{currentState}}</p></ion-item>
-            
+                <ion-item>
+                    <p style="margin-top:-15px;font-weight:bold;">Current State:</p>
+                    <p style="margin-bottom:-15px;">{{currentState}}</p>
+                </ion-item>
+
                 <!--
                 <ion-toggle toggle-class="toggle-calm" ng-model="view.enable" ng-change="onViewChanged()" ng-checked="view.enable">
                     Enable 3D View
@@ -18,7 +25,7 @@
 -->
                 <ion-toggle ng-model="isAuto" toggle-class="toggle-calm" ng-change="onToggleChange(isAuto)"><span>Auto-update</span>
                 </ion-toggle>
-                    <button class="button button-small button-block button-calm" ng-disabled="isAuto" style="margin-top:0px;" ng-click="manualUpdate()">Manual Update</button>
+                <button class="button button-small button-block button-calm" ng-disabled="isAuto" style="margin-top:0px;" ng-click="manualUpdate()">Manual Update</button>
             </div>
             <div class="info-view">
                 <ion-item>
@@ -39,7 +46,7 @@
                     <button ng-click="setLoc()" class="button button-small button-block button-royal">Set Start</button>
                 </ion-item>
             </div>
-<!--
+            <!--
             <div class="row">
                 <div class="col col-center">
                     <ion-toggle ng-model="isAuto" toggle-class="toggle-calm"><span>Auto-update</span>
